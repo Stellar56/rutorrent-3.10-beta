@@ -11,3 +11,5 @@ $useExternal = false;		// Valid choices:
 $pathToCreatetorrent = '';	// Something like /bin/createtorrent, or /bin/transmissioncli. If empty, program will be found in PATH.
 
 $recentTrackersMaxCount = 15;
+
+?>
