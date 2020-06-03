@@ -276,5 +276,6 @@ var theUILang =
  Save_path			: "Lagringsmappe",
  registerMagnet			: "Prøv å registrere magnetprotokoll-håndterer på oppstart",
  linkTorTorrentRestored		: "Connection to rTorrent established.",
- removeAllTegs			: "Remove all tags"
+ removeAllTegs			: "Remove all tags",
+ Torrents			: "Torrent(s)"
 };

@@ -2,17 +2,16 @@
 	// configuration parameters
 
 	// for snoopy client
-	@define('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 6.0; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0', true);
+	@define('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36', true);
 	@define('HTTP_TIME_OUT', 30, true);	// in seconds
 	@define('HTTP_USE_GZIP', true, true);
 	$httpIP = null;				// IP string. Or null for any.
-	$httpProxy = array
-	(
+	$httpProxy = array(
 		'use' 	=> false,
 		'proto'	=> 'http',		// 'http' or 'https'
 		'host'	=> 'PROXY_HOST_HERE',
 		'port'	=> 3128
-	);
+);
 
 	@define('RPC_TIME_OUT', 5, true);	// in seconds
 
@@ -52,12 +51,12 @@
 		"gzip"	=> '',			// Something like /usr/bin/gzip. If empty, will be found in PATH.
 		"id"	=> '',			// Something like /usr/bin/id. If empty, will be found in PATH.
 		"stat"	=> '',			// Something like /usr/bin/stat. If empty, will be found in PATH.
-	);
+);
 
 	$localhosts = array( 			// list of local interfaces
 		"127.0.0.1",
 		"localhost",
-	);
+);
 
 	$profilePath = '../share';		// Path to user profiles
 	$profileMask = 0777;			// Mask for files and directory creation in user profiles.
@@ -69,3 +68,5 @@
 	$canUseXSendFile = false;		// If true then use X-Sendfile feature if it exist
 
 	$locale = "UTF8";
+
+?>

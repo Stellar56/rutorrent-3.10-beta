@@ -826,7 +826,7 @@ var theSort =
 	},
 
 	peers_total_re: /\((\d+)\)$/,
-	peers_connected_re: /^(\d+)/,
+	peers_connected_re: /^(\d+)/
 };
 
 dxSTable.prototype.init = function() 
@@ -1527,6 +1527,18 @@ dxSTable.prototype.clearSelection = function()
 		this.rowSel[k] = false;
 	this.selCount = 0;
 	this.refreshSelection();
+}
+
+dxSTable.prototype.correctSelection = function()
+{
+	this.selCount = 0;
+	for(var k in this.rowSel) 
+	{
+		if(this.rowdata[k].enabled && this.rowSel[k])
+		{
+			this.selCount++;
+		}
+	}
 }
 
 dxSTable.prototype.fillSelection = function() 

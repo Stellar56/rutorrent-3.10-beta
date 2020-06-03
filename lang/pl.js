@@ -278,5 +278,6 @@ var theUILang =
  Save_path			: "Ścieżka zapisu",
  registerMagnet			: "Próbuj dodać obsługę linków magnet przy starcie",
  linkTorTorrentRestored		: "Nawiązano połączenie z rTorrent.",
- removeAllTegs			: "Usuń wszystkie znaczniki"
+ removeAllTegs			: "Usuń wszystkie znaczniki",
+ Torrents			: "Torrenty"
 };

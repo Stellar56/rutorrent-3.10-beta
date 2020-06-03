@@ -2,10 +2,10 @@
 
 require_once(dirname(__FILE__)."/cloudflare.php");
 
-	$ok = true;
+$ok = true;
 if($do_diagnostic) {
 if( !rCloudflare::is_module_present() ) {
-	$jResult .= "plugin.disable(); plugin.showError('theUILang.cannotLoadCloudscraper')";
+	$jResult .= "plugin.disable(); plugin.showError('theUILang.cannotLoadCloudscraper');";
 	$ok = false;
 }
 }

@@ -23,8 +23,11 @@ class rTorrentSettings
 	public $server = '';
 	public $portRange = '6890-6999';
 	public $port = '6890';
+	public $bind = '0.0.0.0';
 	public $idNotFound = false;
 	public $home = '';
+	public $tz = null;
+	public $ip = '0.0.0.0';
 
 	static private $theSettings = null;
 
@@ -42,6 +45,10 @@ class rTorrentSettings
 
 	private function __construct()
     	{
+    		if( array_key_exists("browser_timezone",$_COOKIE) )
+    		{
+			$this->tz = $_COOKIE["browser_timezone"];
+		}
 	}
 
 	private function __clone()
@@ -68,13 +75,40 @@ class rTorrentSettings
 		return(array_key_exists($plugin,$this->plugins));
 	}
 
-	public function registerEventHook( $plugin, $ename )
+	public function registerEventHook( $plugin, $ename, $level = 10, $save = false )
 	{
+		$subject = array
+		(
+			"name" => $plugin,
+			"level" => $level,
+		);
+
+		$sort = function ($a,$b) 
+		{ 
+			$lvl1 = (float) $a["level"];
+			$lvl2 = (float) $b["level"];
+			return( $lvl1 > $lvl2 ? 1 : 
+				($lvl1 < $lvl2 ? -1 : strcmp($a["name"], $b["name"]) ));
+		};
+
 		if(is_array($ename))
+		{
 			foreach( $ename as $name )
-				$this->hooks[$name][] = $plugin;
+			{
+				$this->hooks[$name][] = $subject;
+				usort( $this->hooks[$name], $sort );
+			}
+		}
 		else
-			$this->hooks[$ename][] = $plugin;
+		{
+			$this->hooks[$ename][] = $subject;
+			usort( $this->hooks[$ename], $sort );
+		}
+		// hooks with lesser level runs first
+		if( $save )
+		{
+			$this->store();
+		}
 	}
 	protected function unregisterEventHookPrim( $plugin, $ename )
 	{
@@ -83,13 +117,15 @@ class rTorrentSettings
 			if($this->hooks[$ename][$i] == $plugin)
 			{
 				unset($this->hooks[$ename][$i]);
-				if( count($this->hooks[$ename])==0 )
+				if( empty($this->hooks[$ename]) )
+				{
 					unset($this->hooks[$ename]);
+				}
 				break;
 			}
 		}		
 	}
-	public function unregisterEventHook( $plugin, $ename )
+	public function unregisterEventHook( $plugin, $ename, $save = true )
 	{
 		if(is_array($ename))
 		{
@@ -102,24 +138,31 @@ class rTorrentSettings
 		{
 			$this->unregisterEventHookPrim( $plugin, $ename );
 		}
-		$this->store();
+		if( $save )
+		{
+			$this->store();
+		}
 	}
 	public function pushEvent( $ename, $prm )
 	{
 		if( array_key_exists($ename,$this->hooks))
-			for( $i = 0; $i<count($this->hooks[$ename]); $i++ )
+		{
+			$prm = array($prm);
+			foreach( $this->hooks[$ename] as $hook )
 			{
-				$pname = $this->hooks[$ename][$i];
-				$file = dirname(__FILE__).'/../plugins/'.$pname.'/hooks.php';
+				$file = dirname(__FILE__).'/../plugins/'.$hook['name'].'/hooks.php';
 				if(is_file($file))
 				{
 					require_once( $file );
-					$func = $pname.'Hooks::On'.$ename;
+					$func = $hook['name'].'Hooks::On'.$ename;
 					if(is_callable( $func ) && 
-						(call_user_func_array($func,array($prm))==true))
+						(call_user_func_array($func,$prm)==true))
+					{
 						break;
+					}
 				}
 			}
+		}
 	}
 
 	public function store()
@@ -209,6 +252,8 @@ class rTorrentSettings
 					new rXMLRPCCommand("set_xmlrpc_size_limit",67108863),
 					new rXMLRPCCommand("get_name"),
 					new rXMLRPCCommand("get_port_range"),
+					new rXMLRPCCommand("get_bind"),
+					new rXMLRPCCommand("get_ip"),
 					) );
 				if($req->success())
 				{
@@ -218,6 +263,8 @@ class rTorrentSettings
 					$this->server = $req->val[4];
 					$this->portRange = $req->val[5];
 					$this->port = intval($this->portRange);
+					$this->bind = $req->val[6];
+					$this->ip = $req->val[7];
 
 					if($this->iVersion>=0x809)
 					{

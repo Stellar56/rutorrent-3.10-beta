@@ -277,5 +277,6 @@ var theUILang =
  Save_path			: "Speicherpfad",
  registerMagnet			: "Try to register magnet protocol handler at start",
  linkTorTorrentRestored		: "Connection to rTorrent established.",
- removeAllTegs			: "Remove all tags"
+ removeAllTegs			: "Remove all tags",
+ Torrents			: "Torrent(s)"
 };

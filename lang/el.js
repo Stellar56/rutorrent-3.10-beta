@@ -275,5 +275,6 @@ var theUILang =
  Save_path			: "Τοποθεσία αποθήκευσης",
  registerMagnet			: "Προσπάθεια καταχώρησης του πρωτόκολλου magnet κατά την εκκίνηση",
  linkTorTorrentRestored		: "Η επικοινωνία με το rTorrent επιτεύχθηκε.",
- removeAllTegs			: "Διαγραφή όλων των ετικετών"
+ removeAllTegs			: "Διαγραφή όλων των ετικετών",
+ Torrents			: "Torrent(s)"
 };
